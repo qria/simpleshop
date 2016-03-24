@@ -27,7 +27,7 @@ var/
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
-/ticketplace/local_settings.py
+/simpleshop/local_settings.py
 *.spec
 
 # Installer logs
@@ -61,7 +61,9 @@ target/
 .iws
 **/workspace.xml
 tasks.xml
-ticketplace/database.db
 
 # Backup folder
 bak/
+
+# local database
+database.db

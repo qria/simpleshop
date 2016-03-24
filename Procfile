@@ -1,0 +1,1 @@
+web: gunicorn --pythonpath /simpleshop simpleshop.wsgi:app
