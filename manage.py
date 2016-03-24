@@ -10,7 +10,7 @@ from simpleshop.models import db, User
 # default to dev config because no one should use this in
 # production anyway
 env = os.environ.get('SIMPLESHOP_ENV', 'dev')
-app = create_app('simpleshop.settings.%sConfig' % env.capitalize(), env=env)
+app = create_app('simpleshop.settings.%sConfig' % env.capitalize())
 
 manager = Manager(app)
 manager.add_command("server", Server())
