@@ -1,8 +1,11 @@
 import json
-import requests
 import bs4
+from concurrent.futures import ThreadPoolExecutor
+from requests_futures.sessions import FuturesSession
+from simpleshop.controllers.measure_time import measure_time
 
 
+@measure_time
 def crawl_product_data(query, reroll=None):
     """ Crawl product data from coupang with given query.
     Note that coupang has a lot of different formats for a product page,
@@ -20,10 +23,16 @@ def crawl_product_data(query, reroll=None):
     if not reroll:
         reroll = 0
 
-    # Search query and get product id
+    # Asynchronously crawl all necessary pages
+
+    session = FuturesSession(executor=ThreadPoolExecutor(max_workers=10))
+
     search_url = 'http://www.coupang.com/np/search?q=%s'
+    future_search_page = session.get(search_url % query)
+
+    # Search query and get product id
     try:
-        search_page = requests.get(search_url % query)
+        search_page = future_search_page.result()
         soup = bs4.BeautifulSoup(search_page.text)
         product_data_json = soup.find('ul', id='productList')['data-products']
         product_data = json.loads(product_data_json)
@@ -33,10 +42,16 @@ def crawl_product_data(query, reroll=None):
         print("Can't get product id")
         raise
 
-    # Try to parse all data from product page
+    # Links with product_id needed is crawled after getting product_id
+
     product_url = 'http://www.coupang.com/np/products/%d'
+    future_product_page = session.get(product_url % product_id)
+    basic_info_url = 'http://www.coupang.com/vp/products/%d/basic-info'
+    future_basic_info_page = session.get(basic_info_url % product_id)
+
+    # Try to parse all data from product page
     try:
-        product_page = requests.get(product_url % product_id)
+        product_page = future_product_page.result()
         soup = bs4.BeautifulSoup(product_page.text)
         product_name = soup.find('span', 'product-name').text
         product_price = soup.find('strong', 'price').text
@@ -53,9 +68,8 @@ def crawl_product_data(query, reroll=None):
 
     # If parsing from product page fails, try to crawl xhr pages
     # Get product name and first item id
-    basic_info_url = 'http://www.coupang.com/vp/products/%d/basic-info'
     try:
-        basic_info_page = requests.get(basic_info_url % product_id)
+        basic_info_page = future_basic_info_page.result()
         soup = bs4.BeautifulSoup(basic_info_page.text)
         product_name = soup.find('h2', 'prod-buy-header__title').text
         item_data_json = soup.find('div', 'detail-section')['data-reference']
@@ -64,10 +78,15 @@ def crawl_product_data(query, reroll=None):
         print("Can't get basic info")
         raise
 
-    # Get item price
+    # Crawl pages with item_id here
     sales_info_url = 'http://www.coupang.com/vp/products/{product_id}/vendor-items/{item_id}/sale-infos'
+    future_sales_info_page = session.get(sales_info_url.format(product_id=product_id, item_id=item_id))
+    product_image_url = 'http://www.coupang.com/vp/products/{product_id}/vendor-items/{item_id}/images'
+    future_product_image_page = session.get(product_image_url.format(item_id=item_id, product_id=product_id))
+
+    # Get item price
     try:
-        sales_info_page = requests.get(sales_info_url.format(product_id=product_id, item_id=item_id))
+        sales_info_page = future_sales_info_page.result()
         soup = bs4.BeautifulSoup(sales_info_page.text)
         item_price = soup.find('span', id='totalPrice').text
     except:
@@ -75,10 +94,8 @@ def crawl_product_data(query, reroll=None):
         raise
 
     # Get item image
-    product_image_url = 'http://www.coupang.com/vp/products/{product_id}/vendor-items/{item_id}/images'
     try:
-        product_image_url.format(item_id=item_id, product_id=product_id)
-        product_image_page = requests.get(product_image_url.format(item_id=item_id, product_id=product_id))
+        product_image_page = future_product_image_page.result()
         soup = bs4.BeautifulSoup(product_image_page.text)
         item_image_url = soup.find('div', 'prod-image__item')['data-detail-img-src']
     except:
