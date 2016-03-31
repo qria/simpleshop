@@ -1,3 +1,30 @@
+body {
+    background-color: lightblue;
+    color: white;
+
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
 .container {
     margin-top: 60px;
+    text-align: center;
+}
+
+.jumbotron {
+    background-color: lightblue;
+}
+
+#search input[type="search"] {
+    top: 50%;
+    /*width: 100%;*/
+    /*color: rgb(255, 255, 255);*/
+    /*background: rgba(0, 0, 0, 0);*/
+    font-size: 30px;
+    font-weight: 300;
+    color: black;
+    text-align: center;
+    border: 0px;
+    margin: 0px auto;
+    margin-top: -51px;
+    padding-left: 30px;
+    padding-right: 30px;
 }
