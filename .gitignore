@@ -66,4 +66,8 @@ tasks.xml
 bak/
 
 # local database
-database.db
+database.db
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
