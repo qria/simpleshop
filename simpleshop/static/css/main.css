@@ -10,9 +10,43 @@ body {
 }
 
 .jumbotron {
+    margin-top: 128px;
     background-color: lightblue;
 }
 
+.main_logo {
+    color: white;
+    font-size: 80px;
+    margin-bottom: 50px;
+}
+
+/* make logo and search bar in /search in single line*/
+.top_logo{
+    color: inherit;
+    display: inline;
+    font-size: 40px;
+    margin-right: 10px;
+}
+.top_logo:hover,
+.top_logo:active,
+.top_logo:focus{
+    color: inherit;
+    /*highlight when hovered*/
+    text-shadow: 1px 1px #000;
+    /*remove underline*/
+    text-decoration: none;
+}
+#top_search_form{
+    display: inline;
+}
+
+
+/* search bar styling */
+#main_search_form {
+    margin-left:250px;
+    max-width: 500px;
+    position: relative;
+}
 #search input[type="search"] {
     top: 50%;
     /*width: 100%;*/
@@ -24,7 +58,10 @@ body {
     text-align: center;
     border: 0px;
     margin: 0px auto;
-    margin-top: -51px;
     padding-left: 30px;
     padding-right: 30px;
+}
+
+#product {
+    padding-top: 50px;
 }
