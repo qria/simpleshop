@@ -1,4 +1,8 @@
+import json
+
 from flask import Blueprint, render_template, flash, request, redirect, url_for
+
+import requests
 
 from simpleshop.extensions import cache
 from simpleshop.controllers.crawl import crawl_product_data
@@ -30,3 +34,16 @@ def search(query=None):
         product = None
 
     return render_template('search.html', **locals())
+
+
+@main.route('/api/typeahead/<query>')
+def typeahead(query=None):
+    """ Api call for search typeahead. Returns list of keywords as json """
+    typeahead_url = 'http://www.coupang.com/np/search/autoComplete?callback=_&keyword=%s' % query
+    response = requests.get(typeahead_url)
+    json_raw = response.text[2:-1] # Remove jquery function wrapper _( )
+    typeahead_data = json.loads(json_raw)
+    suggested_keywords = [keywords['keyword'] for keywords in typeahead_data['suggestKeyword']]
+    suggested_keywords_json = json.dumps(suggested_keywords)
+
+    return suggested_keywords_json
