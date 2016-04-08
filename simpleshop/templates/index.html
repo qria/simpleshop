@@ -5,13 +5,15 @@
 {%block body%}
     <div class="jumbotron">
         <h1 class="main_logo">Simple Shop</h1>
-        <div id="search">
-            <form action="/search" method="POST">
-                <input type="search" name="query" placeholder="아무거나 입력해 보세요!"/>
-                <button type="submit" class="btn btn-primary">검색</button>
-            </form>
-        </div>
+        <form id="main_search_form" action="/search" method="POST">
+            <div id="search" class="input-group input-group-lg">
+                <input class="form-control" type="search" name="query" placeholder="아무거나 입력해 보세요!"/>
+                    <div class="input-group-btn">
+                        <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
-
 
 {%endblock%}
