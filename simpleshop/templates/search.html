@@ -22,16 +22,18 @@
                 <div class="col-lg-6">
                     <img src="{{ product.image }}" alt="">
                 </div>
-                <div class="col-lg-6">
-                    <h3> {{ product.name }}</h3>
-                    <h1> {{ product.price }} 원</h1>
-                    <button type="button" class="btn btn-lg btn-success" data-toggle="modal" data-target="#buyModal">구매
-                        <span class="glyphicon glyphicon-shopping-cart"></span>
-                    </button>
-                    <a href="{{ url_for('main.search', query=query, reroll=reroll+1 ) }}">
-                        <button type="button" class="btn btn-lg btn-danger">다른 상품
-                            <span class="glyphicon glyphicon-repeat"></span></button>
-                    </a>
+                <div class="col-lg-6 product_info">
+                    <div id="product_name"> {{ product.name }}</div>
+                    <div id="product_price"> {{ product.price }} 원</div>
+                    <div class="product_buttons">
+                        <button type="button" class="btn btn-lg btn-success" data-toggle="modal" data-target="#buyModal">구매
+                            <span class="glyphicon glyphicon-shopping-cart"></span>
+                        </button>
+                        <a href="{{ url_for('main.search', query=query, reroll=reroll+1 ) }}">
+                            <button type="button" class="btn btn-lg btn-danger">다른 상품
+                                <span class="glyphicon glyphicon-repeat"></span></button>
+                        </a>
+                    </div>
                 </div>
             </div>
             {% else %}
@@ -39,6 +41,9 @@
             {% endif %}
         </div>
     </div>
+{% endblock %}
+
+{% block modal %}
     <div class="modal fade" id="buyModal" tabindex="-1">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -47,16 +52,14 @@
                     <h2 class="modal-title">아직 프로토타입입니다!</h2>
                 </div>
                 <div class="modal-body">
-                    제품이 완성되는걸 보고 싶으신가요? <br>
-                    그럼 (주)Simple Shop에 투자를 하세요!
+                    결제기능이 아직 구현되지 않아 링크로 대체합니다.
                 </div>
                 <div class="modal-footer">
-
-                    <a target="_blank" href="{{ product.url }}" class="btn btn-success">제품 페이지</a>
+                    <a target="_blank" href="{{ product.url }}" class="btn btn-success">제품 페이지
+                    <span class="glyphicon glyphicon-arrow-right"></span></a>
                     <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>
     </div>
-
 {% endblock %}

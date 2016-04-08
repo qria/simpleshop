@@ -62,6 +62,28 @@ body {
     padding-right: 30px;
 }
 
+/*Product page styling*/
 #product {
     padding-top: 50px;
+}
+
+.product_info {
+    padding-top: 100px;
+}
+#product_name {
+    font-size: 40px;
+}
+#product_price {
+    font-size: 50px;
+}
+.product_buttons{
+    padding-top: 50px;
+}
+
+/*Product buy modal styling*/
+#buyModal {
+    text-align: center;
+    font-size: 25px;
+    color: #000;
+    text-shadow: none;
 }
