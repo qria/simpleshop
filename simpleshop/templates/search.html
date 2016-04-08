@@ -3,16 +3,15 @@
 {% block title %}Simple Shop{% endblock %}
 
 {% block body %}
-    <div class="jumbotron">
-        <h1>Simple Shop</h1>
+    <div>
         <div id="search">
-            <form action="/search" method="POST">
+            <a class="top_logo" href="/">Simple Shop</a>
+            <form id="top_search_form" action="/search" method="POST">
                 <input type="search" name="query" value="{{ query }}" placeholder="아무거나 입력해 보세요!"/>
                 <button type="submit" class="btn btn-primary">검색</button>
             </form>
         </div>
-        <div> </div>
-        <div>
+        <div id="product">
             {% if product is not none %}
             <div class="row">
                 <div class="col-lg-6">
