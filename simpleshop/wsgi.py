@@ -2,4 +2,4 @@
 """
 from simpleshop import create_app
 
-app = create_app('simpleshop.settings.ProdConfig')
+application = app = create_app('simpleshop.settings.ProdConfig')
