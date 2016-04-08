@@ -27,8 +27,8 @@ def crawl_product_data(query, reroll=None):
 
     session = FuturesSession(executor=ThreadPoolExecutor(max_workers=10))
 
-    search_url = 'http://www.coupang.com/np/search?q=%s'
-    future_search_page = session.get(search_url % query)
+    search_url = 'http://www.coupang.com/np/search?q=%s' % query
+    future_search_page = session.get(search_url)
 
     # Search query and get product id
     try:
@@ -44,10 +44,10 @@ def crawl_product_data(query, reroll=None):
 
     # Links with product_id needed is crawled after getting product_id
 
-    product_url = 'http://www.coupang.com/np/products/%d'
-    future_product_page = session.get(product_url % product_id)
-    basic_info_url = 'http://www.coupang.com/vp/products/%d/basic-info'
-    future_basic_info_page = session.get(basic_info_url % product_id)
+    product_url = 'http://www.coupang.com/np/products/%d' % product_id
+    future_product_page = session.get(product_url)
+    basic_info_url = 'http://www.coupang.com/vp/products/%d/basic-info' % product_id
+    future_basic_info_page = session.get(basic_info_url)
 
     # Try to parse all data from product page
     try:
@@ -58,6 +58,7 @@ def crawl_product_data(query, reroll=None):
         product_image_url = soup.find('div', id='image0').img['src']
         product = {
             'id': product_id,
+            'url': product_url,
             'name': product_name,
             'price': product_price,
             'image': product_image_url
@@ -79,10 +80,10 @@ def crawl_product_data(query, reroll=None):
         raise
 
     # Crawl pages with item_id here
-    sales_info_url = 'http://www.coupang.com/vp/products/{product_id}/vendor-items/{item_id}/sale-infos'
-    future_sales_info_page = session.get(sales_info_url.format(product_id=product_id, item_id=item_id))
-    product_image_url = 'http://www.coupang.com/vp/products/{product_id}/vendor-items/{item_id}/images'
-    future_product_image_page = session.get(product_image_url.format(item_id=item_id, product_id=product_id))
+    sales_info_url = 'http://www.coupang.com/vp/products/{product_id}/vendor-items/{item_id}/sale-infos'.format(product_id=product_id, item_id=item_id)
+    future_sales_info_page = session.get(sales_info_url)
+    product_image_url = 'http://www.coupang.com/vp/products/{product_id}/vendor-items/{item_id}/images'.format(item_id=item_id, product_id=product_id)
+    future_product_image_page = session.get(product_image_url)
 
     # Get item price
     try:
@@ -105,6 +106,7 @@ def crawl_product_data(query, reroll=None):
     product = {
         'id': product_id,
         'name': product_name,
+        'url': product_url,
         'item_id': item_id,
         'price': item_price,
         'image': item_image_url
