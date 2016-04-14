@@ -81,7 +81,10 @@ body {
 }
 
 /*Product buy modal styling*/
-#buyModal {
+#buyModal,
+#fakeProgressModal,
+#fakeBuyModal
+{
     text-align: center;
     font-size: 25px;
     color: #000;
