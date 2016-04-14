@@ -2,6 +2,8 @@ body {
     background-color: lightblue;
     color: white;
 
+  text-align: center;
+
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 .container {
@@ -43,15 +45,15 @@ body {
 
 /* search bar styling */
 #main_search_form {
-    margin-left:250px;
     max-width: 500px;
+    margin: auto;
     position: relative;
+}
+img {
+    max-width:100%;
 }
 #search input[type="search"] {
     top: 50%;
-    /*width: 100%;*/
-    /*color: rgb(255, 255, 255);*/
-    /*background: rgba(0, 0, 0, 0);*/
     font-size: 30px;
     font-weight: 300;
     color: black;
@@ -70,14 +72,48 @@ body {
 .product_info {
     padding-top: 100px;
 }
-#product_name {
-    font-size: 40px;
-}
-#product_price {
-    font-size: 50px;
-}
+
 .product_buttons{
     padding-top: 50px;
+}
+/* xs < 768 */
+@media screen and (max-width: 767px) {
+    #product_name {
+        font-size: 30px;
+    }
+    #product_price {
+        font-size: 35px;
+    }
+}
+
+/* sm */
+@media screen and (min-width: 768px) {
+    #product_name {
+        font-size: 40px;
+    }
+    #product_price {
+        font-size: 50px;
+    }
+}
+
+/* md */
+@media screen and (min-width: 992px) {
+    #product_name {
+        font-size: 40px;
+    }
+    #product_price {
+        font-size: 50px;
+    }
+}
+
+/* lg */
+@media screen and (min-width: 1200px) {
+    #product_name {
+        font-size: 40px;
+    }
+    #product_price {
+        font-size: 50px;
+    }
 }
 
 /*Product buy modal styling*/
