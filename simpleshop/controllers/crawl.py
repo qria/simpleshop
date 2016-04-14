@@ -37,7 +37,14 @@ def crawl_product_data(query, reroll=None):
         product_data_json = soup.find('ul', id='productList')['data-products']
         product_data = json.loads(product_data_json)
 
-        product_id = product_data['indexes'][reroll]  # Get reroll-th product
+        # if adult product, reroll until it's not
+        # TODO: implement login so we can view adult products
+        while True:
+            product_id = product_data['indexes'][reroll]  # Get reroll-th product
+            if 'adultProduct' in soup.find('li', id=product_id).img['src']:
+                    reroll += 1
+            else:
+                break
     except:
         print("Can't get product id")
         raise
