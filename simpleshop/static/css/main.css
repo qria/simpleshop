@@ -12,14 +12,26 @@ body {
 }
 
 .jumbotron {
-    margin-top: 128px;
     background-color: lightblue;
+    margin-top: 128px;
+}
+/* if mobile no top margin*/
+@media screen and (max-width: 767px) {
+    .jumbotron {
+        margin-top: 0;
+    }
 }
 
-.main_logo {
+h1.main_logo {
     color: white;
     font-size: 80px;
     margin-bottom: 50px;
+}
+/* if mobile size down font*/
+@media screen and (max-width: 767px) {
+    h1.main_logo{
+        font-size: 43px;
+    }
 }
 
 /* make logo and search bar in /search in single line*/
@@ -49,6 +61,8 @@ body {
     margin: auto;
     position: relative;
 }
+
+/* Make <img> responsive */
 img {
     max-width:100%;
 }
@@ -58,10 +72,18 @@ img {
     font-weight: 300;
     color: black;
     text-align: center;
-    border: 0px;
-    margin: 0px auto;
+    border: 0;
+    margin: 0 auto;
     padding-left: 30px;
     padding-right: 30px;
+}
+/* if mobile */
+@media screen and (max-width: 767px) {
+    #search input[type="search"] {
+        font-size: 19px;
+        padding-left: 7px;
+        padding-right: 7px;
+    }
 }
 
 /*Product page styling*/
