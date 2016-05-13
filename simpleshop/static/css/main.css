@@ -54,10 +54,18 @@ h1.main_logo {
     display: inline;
 }
 
+/* Cart icon styling*/
+
+
+#cart-icon{
+    float: right;
+    padding: 0 0 0 15px;
+    vertical-align: middle;
+}
 
 /* search bar styling */
 #main_search_form {
-    max-width: 500px;
+    max-width: 530px;
     margin: auto;
     position: relative;
 }

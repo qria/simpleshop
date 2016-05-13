@@ -9,7 +9,8 @@ main = Blueprint('main', __name__)
 @cache.cached(timeout=1000)
 def home():
     """ Main page """
-    return render_template('index.html')
+    cart_item_cart = 7
+    return render_template('index.html', **locals())
 
 
 @main.route('/search', methods=("GET", "POST"))
@@ -19,6 +20,7 @@ def search(query=None):
     query: Query string
     reroll: How many times the user has pushed 'reroll' button
     """
+    cart_item_cart = 7
     if request.method == 'POST':
         query = request.form['query']
         return redirect(url_for('main.search', query=query))
@@ -30,3 +32,8 @@ def search(query=None):
         product = None
 
     return render_template('search.html', **locals())
+
+
+@main.route('/cart')
+def cart():
+    return render_template('cart.html', **locals())
