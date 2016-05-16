@@ -24,15 +24,53 @@ def manage_cart(product, add=True, session=session):
         if product['id'] in [item['id'] for item in session['cart']]:
             raise Exception('이미 장바구니에 담긴 상품입니다.')
 
+        product['quantity'] = 1
         session['cart'].append(product)
     else:
         # Remove product from cart
-        for i, item in enumerate(session['cart']):
-            if product['id'] == item['id']:
-                session['cart'].pop(i)
-                break
-        else:
-            raise Exception('장바구니에 해당 상품이 없습니다.')
+        delete_from_cart(product['id'])
+
+def delete_from_cart(product_id):
+    """ Delete item from cart by its product_id """
+    for i, item in enumerate(session['cart']):
+        if str(product_id) == str(item['id']):
+            session['cart'].pop(i)
+            break
+    else:
+        raise Exception('장바구니에 해당 상품이 없습니다.')
+
+
+@main.route('/api/delete_from_cart/<product_id>')
+def api_delete_from_cart(product_id):
+    """ api endpoint for delete_from_cart """
+    try:
+        delete_from_cart(product_id)
+        flash('장바구니에서 물건이 제거되었습니다.')
+    except Exception as e:
+        flash(str(e))
+    return redirect(request.values.get('next') or request.referrer)
+
+
+def change_product_quantity(product_id, quantity):
+    """ Change product quantity"""
+    for i, item in enumerate(session['cart']):
+        if str(product_id) == str(item['id']):
+            item['quantity'] = quantity
+            break
+    else:
+        raise Exception('장바구니에 해당 상품이 없습니다.')
+
+
+@main.route('/api/change_product_quantity/<product_id>')
+def api_change_product_quantity(product_id):
+    """ api endpoint for chagne_product_quantity """
+    quantity = request.args.get('quantity', type=int)
+    try:
+        change_product_quantity(product_id, quantity)
+        flash('수량이 성공적으로 변경되었습니다.')
+    except Exception as e:
+        flash(str(e))
+    return redirect(request.values.get('next') or request.referrer)
 
 
 @main.route('/search', methods=("GET", "POST"))
@@ -55,30 +93,32 @@ def search(query=None):
     except:
         product = None
 
-    is_item_in_cart = product['id'] in [item['id'] for item in cart_item]
-    add_to_cart = request.args.get('add_to_cart', type=bool, default=False)
-    delete_from_cart = request.args.get('delete_from_cart', type=bool, default=False)
-    if add_to_cart:
-        try:
-            manage_cart(product, add=True)
-            flash('장바구니에 물건이 담겼습니다.')
-        except Exception as e:
-            flash(str(e))
-        finally:
-            cart_item = session['cart']
-            cart_item_count = len(cart_item)
-            is_item_in_cart = product['id'] in [item['id'] for item in cart_item]
+    if product is not None:
+        # if no product code below spits error
+        is_item_in_cart = product['id'] in [item['id'] for item in cart_item]
+        add_to_cart = request.args.get('add_to_cart', type=bool, default=False)
+        delete_from_cart = request.args.get('delete_from_cart', type=bool, default=False)
+        if add_to_cart:
+            try:
+                manage_cart(product, add=True)
+                flash('장바구니에 물건이 담겼습니다. 수량은 장바구니 페이지에서 변경이 가능합니다.')
+            except Exception as e:
+                flash(str(e))
+            finally:
+                cart_item = session['cart']
+                cart_item_count = len(cart_item)
+                is_item_in_cart = product['id'] in [item['id'] for item in cart_item]
 
-    elif delete_from_cart:
-        try:
-            manage_cart(product, add=False)
-            flash('장바구니에서 물건이 제거되었습니다.')
-        except Exception as e:
-            flash(str(e))
-        finally:
-            cart_item = session['cart']
-            cart_item_count = len(cart_item)
-            is_item_in_cart = product['id'] in [item['id'] for item in cart_item]
+        elif delete_from_cart:
+            try:
+                manage_cart(product, add=False)
+                flash('장바구니에서 물건이 제거되었습니다.')
+            except Exception as e:
+                flash(str(e))
+            finally:
+                cart_item = session['cart']
+                cart_item_count = len(cart_item)
+                is_item_in_cart = product['id'] in [item['id'] for item in cart_item]
 
     return render_template('search.html', **locals())
 
@@ -88,5 +128,5 @@ def cart():
     cart_item = session.get('cart', [])
     cart_item_count = len(cart_item)
 
-    total_price = sum(int(product['price']) for product in cart_item)
+    total_price = sum(int(product['price']) * int(product['quantity']) for product in cart_item)
     return render_template('cart.html', **locals())

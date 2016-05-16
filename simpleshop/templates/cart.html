@@ -29,6 +29,7 @@
                     <th>가격</th>
                     <th>수량</th>
                     <th>소계</th>
+                    <th>관리</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -39,11 +40,29 @@
                     </td>
                     <td>{{ product.name }}</td>
                     <td>{{ product.price }} 원</td>
-                    <td>1 개</td>
-                    <td> {{ product.price }} 원</td>
+                    <td>
+                        <div class="edit_quantity_div" style="display: none;">
+                            <form class="form" action="{{ url_for('main.api_change_product_quantity', product_id=product.id) }}">
+                                <input class="form-control quantity_input" type="text" name="quantity" value="{{ product.quantity }}"/>
+                                <button class="btn btn-success quantity_button">변경</button>
+                            </form>
+                        </div>
+                        <div class="show_quantity_div">
+                            {{ product.quantity }} 개
+                            <button class="btn btn-info edit_quantity">변경</button>
+                        </div>
+                    </td>
+                    <td> {{ product.price * product.quantity }} 원</td>
+                    <td>
+                        <a href="{{ url_for('main.api_delete_from_cart', product_id=product.id) }}">
+                        <button class="btn btn-danger">제거
+                            <i class="fa fa-remove"></i></button>
+                        </a>
+                    </td>
                 </tr>
                 {% endfor %}
                 <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -122,6 +141,14 @@
             $('#fakeBuyButton').toggleClass('fa-shopping-cart fa-cog fa-spin fa-fw');
             $('#buyButton').toggleClass('disabled');
         }, 3000);
+    })
+
+    $('.edit_quantity').bind('click', function(e){
+        e.stopPropagation();
+        var td = $(this).closest('td');
+        td.children('div.edit_quantity_div').show()
+        td.children('div.show_quantity_div').hide()
+
     })
     </script>
 {% endblock %}

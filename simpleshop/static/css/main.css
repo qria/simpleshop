@@ -158,6 +158,12 @@ img {
 }
 
 
+.quantity_input{
+    color: black;
+    width: 50px;
+    float:left;
+}
+
 /* cart page styling */
 #cart-table{
     font-size:20px;
