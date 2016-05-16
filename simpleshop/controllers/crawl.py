@@ -61,7 +61,8 @@ def crawl_product_data(query, reroll=None):
         product_page = future_product_page.result()
         soup = bs4.BeautifulSoup(product_page.text)
         product_name = soup.find('span', 'product-name').text
-        product_price = soup.find('strong', 'price').text
+        product_price_raw = soup.find('strong', 'price').text
+        product_price = int(product_price_raw.replace(',', ''))
         product_image_url = soup.find('div', id='image0').img['src']
         product = {
             'id': product_id,
@@ -96,7 +97,8 @@ def crawl_product_data(query, reroll=None):
     try:
         sales_info_page = future_sales_info_page.result()
         soup = bs4.BeautifulSoup(sales_info_page.text)
-        item_price = soup.find('span', id='totalPrice').text
+        item_price_raw = soup.find('span', id='totalPrice').text
+        item_price = int(item_price_raw.replace(',', ''))
     except:
         print("Can't get sales info")
         raise

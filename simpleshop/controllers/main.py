@@ -87,4 +87,6 @@ def search(query=None):
 def cart():
     cart_item = session.get('cart', [])
     cart_item_count = len(cart_item)
+
+    total_price = sum(int(product['price']) for product in cart_item)
     return render_template('cart.html', **locals())
