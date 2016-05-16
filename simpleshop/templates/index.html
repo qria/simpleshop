@@ -13,7 +13,7 @@
                     </button>
                     <a class="btn btn-success" href="{{ url_for('main.cart') }}">
                       <span class="glyphicon glyphicon-shopping-cart"></span>
-                      {% if cart_item_cart > 0 %}<span class="badge">{{ cart_item_cart }}</span> {% endif %}
+                      {% if cart_item_cart > 0 %}<span class="badge">{{ cart_item_count }}</span> {% endif %}
                     </a>
                 </div>
             </div>

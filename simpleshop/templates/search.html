@@ -12,10 +12,15 @@
                         <div class="input-group-btn">
                             <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-search"></span>
                         </button>
+                        <a class="btn btn-success" href="{{ url_for('main.cart') }}">
+                          <span class="glyphicon glyphicon-shopping-cart"></span>
+                          {% if cart_item_count > 0 %}<span class="badge">{{ cart_item_count }}</span> {% endif %}
+                        </a>
                     </div>
                 </div>
             </form>
         </div>
+    {{ cart_item }}
         <div id="product">
             {% if product is not none %}
             <div class="row">
@@ -26,9 +31,19 @@
                     <div id="product_name"> {{ product.name }}</div>
                     <div id="product_price"> {{ product.price }} 원</div>
                     <div class="product_buttons">
-                        <button type="button" id="buyButton" class="btn btn-lg btn-success" data-toggle="modal" data-target="#buyModal">구매
-                            <i id="fakeBuyButton" class="fa fa-shopping-cart"></i>
-                        </button>
+                        {% if not is_item_in_cart %}
+                        <a href="{{ url_for('main.search', query=query, reroll=reroll, add_to_cart=true ) }}">
+                            <button type="button" class="btn btn-lg btn-success">장바구니
+                                <i class="fa fa-shopping-cart"></i>
+                            </button>
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('main.search', query=query, reroll=reroll, delete_from_cart=true ) }}">
+                            <button type="button" class="btn btn-lg btn-warning">장바구니에서 제거
+                                <i class="fa fa-remove"></i>
+                            </button>
+                        </a>
+                        {% endif %}
                         <a href="{{ url_for('main.search', query=query, reroll=reroll+1 ) }}">
                             <button type="button" class="btn btn-lg btn-danger">다른 상품
                                 <span class="glyphicon glyphicon-repeat"></span></button>
@@ -97,18 +112,4 @@
 
 {% block js %}
     {{ super() }}
-    <script>
-    $('#fakeBuyButton').bind('click',function(e){
-        e.stopPropagation();
-        $('#fakeBuyButton').toggleClass('fa-shopping-cart fa-cog fa-spin fa-fw');
-        $('#buyButton').toggleClass('disabled');
-        $('#fakeProgressModal').modal('show');
-        setTimeout(function(){
-            $('#fakeProgressModal').modal('hide');
-            $('#fakeBuyModal').modal('show');
-            $('#fakeBuyButton').toggleClass('fa-shopping-cart fa-cog fa-spin fa-fw');
-            $('#buyButton').toggleClass('disabled');
-        }, 3000);
-    })
-    </script>
 {% endblock %}

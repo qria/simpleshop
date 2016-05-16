@@ -156,3 +156,12 @@ img {
     color: #000;
     text-shadow: none;
 }
+
+
+/* cart page styling */
+#cart-table{
+    font-size:20px;
+}
+#cart-table img{
+     width:200px;
+}
