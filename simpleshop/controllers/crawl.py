@@ -3,9 +3,11 @@ import bs4
 from concurrent.futures import ThreadPoolExecutor
 from requests_futures.sessions import FuturesSession
 from simpleshop.controllers.measure_time import measure_time
+from simpleshop.extensions import cache
 
 
 @measure_time
+@cache.memoize()
 def crawl_product_data(query, reroll=None):
     """ Crawl product data from coupang with given query.
     Note that coupang has a lot of different formats for a product page,

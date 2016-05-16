@@ -37,7 +37,7 @@ def create_app(object_name):
     app.config.from_object(object_name)
 
     # initialize the cache
-    cache.init_app(app)
+    cache.init_app(app, config={'CACHE_TYPE':'simple'})
 
     # initialize the debug tool bar
     debug_toolbar.init_app(app)
